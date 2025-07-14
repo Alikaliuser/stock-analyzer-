@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProTrader - Professional Stock Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dark-mode">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-chart-line"></i>
+                    <span>ProTrader</span>
+                </div>
+                <div class="market-status">
+                    <span class="status-dot active"></span>
+                    <span>Market Open</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span class="balance">$<span id="totalBalance">100,000.00</span></span>
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="fullscreen-toggle" id="fullscreenToggle">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3>Watchlist</h3>
+                    <div class="stock-list" id="stockList">
+                        <!-- Stocks will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>Portfolio</h3>
+                    <div class="portfolio-summary">
+                        <div class="portfolio-item">
+                            <span>Total Value</span>
+                            <span class="portfolio-value">$<span id="portfolioValue">100,000.00</span></span>
+                        </div>
+                        <div class="portfolio-item">
+                            <span>Today's P&L</span>
+                            <span class="pnl positive" id="todayPnL">+$0.00</span>
+                        </div>
+                    </div>
+                    <div class="portfolio-holdings" id="portfolioHoldings">
+                        <!-- Portfolio items will be populated by JavaScript -->
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Chart Area -->
+            <section class="chart-section">
+                <div class="chart-header">
+                    <div class="stock-info">
+                        <h2 id="selectedStockName">Apple Inc.</h2>
+                        <div class="stock-details">
+                            <span class="stock-symbol" id="selectedStockSymbol">AAPL</span>
+                            <span class="stock-price" id="selectedStockPrice">$150.00</span>
+                            <span class="price-change positive" id="priceChange">+$2.50 (+1.67%)</span>
+                        </div>
+                    </div>
+                    <div class="chart-controls">
+                        <div class="timeframe-selector">
+                            <button class="timeframe-btn active" data-timeframe="1D">1D</button>
+                            <button class="timeframe-btn" data-timeframe="1W">1W</button>
+                            <button class="timeframe-btn" data-timeframe="1M">1M</button>
+                            <button class="timeframe-btn" data-timeframe="3M">3M</button>
+                        </div>
+                        <div class="chart-type-selector">
+                            <button class="chart-type-btn active" data-type="candlestick">
+                                <i class="fas fa-chart-bar"></i>
+                            </button>
+                            <button class="chart-type-btn" data-type="line">
+                                <i class="fas fa-chart-line"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="stockChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Trading Panel -->
+            <section class="trading-panel">
+                <div class="trading-header">
+                    <h3>Trade</h3>
+                    <div class="trading-tabs">
+                        <button class="tab-btn active" data-tab="buy">Buy</button>
+                        <button class="tab-btn" data-tab="sell">Sell</button>
+                    </div>
+                </div>
+                
+                <div class="trading-form">
+                    <div class="form-group">
+                        <label>Amount ($)</label>
+                        <div class="amount-input">
+                            <input type="number" id="tradeAmount" value="1000" min="1" step="100">
+                            <div class="amount-buttons">
+                                <button class="amount-btn" data-amount="1000">+1K</button>
+                                <button class="amount-btn" data-amount="10000">+10K</button>
+                                <button class="amount-btn" data-amount="100000">+100K</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trade-summary">
+                        <div class="summary-item">
+                            <span>Shares</span>
+                            <span id="sharesToTrade">0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Commission</span>
+                            <span>$9.99</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Total</span>
+                            <span id="totalTradeAmount">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <button class="execute-btn" id="executeTrade">
+                        <i class="fas fa-play"></i>
+                        Execute Trade
+                    </button>
+                </div>
+                
+                <div class="market-data">
+                    <h4>Market Data</h4>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span>Open</span>
+                            <span id="marketOpen">$148.50</span>
+                        </div>
+                        <div class="data-item">
+                            <span>High</span>
+                            <span id="marketHigh">$152.30</span>
+                        </div>
+                        <div class="data-item">
+                            <span>Low</span>
+                            <span id="marketLow">$147.80</span>
+                        </div>
+                        <div class="data-item">
+                            <span>Volume</span>
+                            <span id="marketVolume">45.2M</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Notifications -->
+        <div class="notifications" id="notifications"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
